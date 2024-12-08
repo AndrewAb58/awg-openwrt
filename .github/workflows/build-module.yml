@@ -29,7 +29,7 @@ build_env :
             vermagic: "0919bf77bd78281b8293e21504faecfb"    
             steps:
             - uses: actions/checkout@v4
-                  with:
+          with:
            repository: openwrt/openwrt
            ref: v${{ matrix.build_env.tag }}
            fetch-depth: 0
