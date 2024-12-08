@@ -26,8 +26,7 @@ build_env :
             pkgarch: aarch64_generic
             target: rockchip
             subtarget: armv8
-            vermagic: "0919bf77bd78281b8293e21504faecfb"
-          
+            vermagic: "0919bf77bd78281b8293e21504faecfb"    
     steps:
       - uses: actions/checkout@v4
         with:
