@@ -27,12 +27,12 @@ build_env :
             target: rockchip
             subtarget: armv8
             vermagic: "0919bf77bd78281b8293e21504faecfb"    
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          repository: openwrt/openwrt
-          ref: v${{ matrix.build_env.tag }}
-          fetch-depth: 0
+            steps:
+            - uses: actions/checkout@v4
+                  with:
+           repository: openwrt/openwrt
+           ref: v${{ matrix.build_env.tag }}
+           fetch-depth: 0
 
       - name: Cache Tools and Kernel
         id: cache-tools-kernel
