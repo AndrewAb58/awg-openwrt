@@ -1,6 +1,7 @@
-name: Create Release on Tag
+name: nanopiR3S
 # on: [workflow_dispatch]
 on:
+  workflow_dispatch:
   push:
     tags:
       - "v*.*.*"
@@ -9,30 +10,21 @@ jobs:
   build:
     name: "v${{ matrix.build_env.tag }} - ${{ matrix.build_env.pkgarch}} :: ${{ matrix.build_env.target}}/${{ matrix.build_env.subtarget}} build"
     runs-on: ubuntu-latest
-     strategy:
+    strategy:
       matrix:
-            build_env :
+        build_env:
           - tag: "23.05.5"
             pkgarch: aarch64_generic
             target: rockchip
             subtarget: armv8
             vermagic: "0919bf77bd78281b8293e21504faecfb"
-          - tag: "23.05.5"
-            pkgarch: aarch64_generic
-            target: rockchip
-            subtarget: armv8
-            vermagic: "0919bf77bd78281b8293e21504faecfb"
-          - tag: "23.05.5"
-            pkgarch: aarch64_generic
-            target: rockchip
-            subtarget: armv8
-            vermagic: "0919bf77bd78281b8293e21504faecfb"    
-            steps:
-            - uses: actions/checkout@v4
-          with:
-           repository: openwrt/openwrt
-           ref: v${{ matrix.build_env.tag }}
-           fetch-depth: 0
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: openwrt/openwrt
+          ref: v${{ matrix.build_env.tag }}
+          fetch-depth: 0
 
       - name: Cache Tools and Kernel
         id: cache-tools-kernel
@@ -119,8 +111,13 @@ jobs:
           cp bin/packages/${{ matrix.build_env.pkgarch }}/awgopenwrt/luci-app-amneziawg_*.ipk awgrelease/luci-app-amneziawg_${postfix}.ipk
           cp bin/targets/${{ matrix.build_env.target}}/${{ matrix.build_env.subtarget}}/packages/kmod-amneziawg_*.ipk awgrelease/kmod-amneziawg_${postfix}.ipk
 
+      - name: Generate release tag
+        id: tag
+        run: |
+          echo "::set-output name=release_tag::Build_$(date +"%Y.%m.%d-%H.%M")"
+
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           files: awgrelease/*.ipk
-
+          tag_name: ${{ steps.tag.outputs.release_tag }}
